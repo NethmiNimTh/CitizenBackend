@@ -2,8 +2,8 @@ import Plant from "../models/plantModel.js";
 
 export const createPlant = async (req, res) => {
   try {
-    // console.log(' POST /api/plants - Received request');
-    // console.log('Body size:', JSON.stringify(req.body).length, 'bytes');
+    console.log(' POST /api/plants - Received request');
+    console.log('Body size:', JSON.stringify(req.body).length, 'bytes');
     
     const { 
       plantCategory, 
