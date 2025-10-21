@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import userRoutes from "./Routes/userRoutes.js";
 import plantRoutes from "./Routes/plantRoutes.js";
 import { errorHandler } from "./Middlewares/errorMiddlewares.js";
+import  natureRoutes from "./Routes/natureRoutes.js";
+
 
 dotenv.config();
 const app = express();
@@ -24,23 +26,25 @@ app.get("/", (req, res) => {
     endpoints: {
       users: "/api/users",
       plants: "/api/plants",
-      test: "/api/test"
+      // test: "/api/test"
+      nature: "/api/nature",
     }
   });
 });
 
 // Test route
-app.get("/api/test", (req, res) => {
-  res.json({ 
-    success: true, 
-    message: "Server is working!",
-    timestamp: new Date().toISOString()
-  });
-});
+// app.get("/api/test", (req, res) => {
+//   res.json({ 
+//     success: true, 
+//     message: "Server is working!",
+//     timestamp: new Date().toISOString()
+//   });
+// });
 
 // API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/plants", plantRoutes);
+app.use("/api/nature", natureRoutes);
 
 // 404 Handler
 app.use((req, res) => {
@@ -61,4 +65,5 @@ app.listen(PORT, () => {
   // console.log(` Test: http://localhost:${PORT}/api/test`);
   // console.log(` Users: http://localhost:${PORT}/api/users`);
   // console.log(`Plants: http://localhost:${PORT}/api/plants\n`);
+  console.log(`🏞️  Nature: http://localhost:${PORT}/api/nature\n`);
 });
