@@ -6,13 +6,16 @@ import userRoutes from "./Routes/userRoutes.js";
 import plantRoutes from "./Routes/plantRoutes.js";
 import natureRoutes from "./Routes/natureRoutes.js";
 import animalRoutes from "./Routes/animalRoutes.js";
+import humanityRoutes from "./Routes/humanityRoutes.js";
 import { errorHandler } from "./Middlewares/errorMiddlewares.js";
+import CreditRoutes from "./Routes/CreditRoutes.js";
 
 
 console.log('userRoutes type:', typeof userRoutes);
 console.log('plantRoutes type:', typeof plantRoutes);
 console.log('natureRoutes type:', typeof natureRoutes);
 console.log('animalRoutes type:', typeof animalRoutes);
+console.log('CreditRoutes type:', typeof CreditRoutes);
 
 
 dotenv.config();
@@ -35,6 +38,10 @@ app.get("/", (req, res) => {
       plants: "/api/plants",
       nature: "/api/nature",
       animals: "/api/animals",
+      humanity:"/api/humanity",
+      credit:"/api/credit",
+
+      
       
     }
   });
@@ -54,6 +61,10 @@ app.use("/api/nature", natureRoutes);
 
 console.log('Registering /api/animals...');
 app.use("/api/animals", animalRoutes);
+
+app.use("/api/humanity",humanityRoutes);
+app.use("/api/photo-information", CreditRoutes);
+
 
 console.log('All routes registered!');
 

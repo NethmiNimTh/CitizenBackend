@@ -1,11 +1,9 @@
 import Animal from "../models/animalModel.js";
 
-// @desc    Create new animal observation
-// @route   POST /api/animals
-// @access  Public
+
 export const createAnimal = async (req, res) => {
   try {
-    console.log('📥 POST /api/animals - Received request');
+    console.log('POST /api/animals - Received request');
     console.log('Body size:', JSON.stringify(req.body).length, 'bytes');
     
     const { 
@@ -19,7 +17,7 @@ export const createAnimal = async (req, res) => {
 
     // Validation
     if (!animalType || !photo || !date || !timeOfDay) {
-      console.log('❌ Validation failed - missing required fields');
+      console.log('Validation failed - missing required fields');
       return res.status(400).json({
         success: false,
         message: "Please provide all required fields (animalType, photo, date, timeOfDay)",
@@ -48,7 +46,7 @@ export const createAnimal = async (req, res) => {
       });
     }
 
-    console.log('✅ Creating animal observation...');
+    console.log('Creating animal observation...');
     console.log('Type:', animalType);
     console.log('Date:', date);
     console.log('Time:', timeOfDay);
@@ -64,7 +62,7 @@ export const createAnimal = async (req, res) => {
       location: location || undefined,
     });
 
-    console.log('✅ Animal observation created:', observation._id);
+    console.log('Animal observation created:', observation._id);
 
     res.status(201).json({
       success: true,
@@ -72,7 +70,7 @@ export const createAnimal = async (req, res) => {
       data: observation,
     });
   } catch (error) {
-    console.error('❌ Error creating animal observation:', error);
+    console.error('Error creating animal observation:', error);
     
     if (error.code === 11000) {
       return res.status(400).json({
@@ -97,9 +95,7 @@ export const createAnimal = async (req, res) => {
   }
 };
 
-// @desc    Get all animal observations
-// @route   GET /api/animals
-// @access  Public
+
 export const getAnimals = async (req, res) => {
   try {
     const observations = await Animal.find().sort({ createdAt: -1 });
@@ -118,9 +114,7 @@ export const getAnimals = async (req, res) => {
   }
 };
 
-// @desc    Get single animal observation by ID
-// @route   GET /api/animals/:id
-// @access  Public
+
 export const getAnimalById = async (req, res) => {
   try {
     const observation = await Animal.findById(req.params.id);
@@ -153,9 +147,7 @@ export const getAnimalById = async (req, res) => {
   }
 };
 
-// @desc    Update animal observation
-// @route   PUT /api/animals/:id
-// @access  Public
+
 export const updateAnimal = async (req, res) => {
   try {
     const observation = await Animal.findByIdAndUpdate(
@@ -200,9 +192,7 @@ export const updateAnimal = async (req, res) => {
   }
 };
 
-// @desc    Delete animal observation
-// @route   DELETE /api/animals/:id
-// @access  Public
+
 export const deleteAnimal = async (req, res) => {
   try {
     const observation = await Animal.findById(req.params.id);
@@ -231,9 +221,7 @@ export const deleteAnimal = async (req, res) => {
   }
 };
 
-// @desc    Get animals by type
-// @route   GET /api/animals/type/:type
-// @access  Public
+
 export const getAnimalsByType = async (req, res) => {
   try {
     const observations = await Animal.find({ 
@@ -254,9 +242,6 @@ export const getAnimalsByType = async (req, res) => {
   }
 };
 
-// @desc    Get animal statistics
-// @route   GET /api/animals/stats
-// @access  Public
 export const getAnimalStats = async (req, res) => {
   try {
     const totalObservations = await Animal.countDocuments();

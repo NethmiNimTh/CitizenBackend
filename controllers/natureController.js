@@ -17,14 +17,14 @@ export const createNature = async (req, res) => {
 
     // Validation
     if (!natureType || !photo || !date || !timeOfDay) {
-      console.log('❌ Validation failed');
+      console.log('Validation failed');
       return res.status(400).json({
         success: false,
         message: "Please provide all required fields",
       });
     }
 
-    console.log('✅ Creating nature observation...');
+    console.log('Creating nature observation...');
     console.log('Type:', natureType);
     console.log('Date:', date);
     console.log('Time:', timeOfDay);
@@ -39,7 +39,7 @@ export const createNature = async (req, res) => {
       location: location || undefined,
     });
 
-    console.log('✅ Nature observation created:', observation._id);
+    console.log('Nature observation created:', observation._id);
 
     res.status(201).json({
       success: true,
@@ -47,7 +47,7 @@ export const createNature = async (req, res) => {
       data: observation,
     });
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error(' Error:', error.message);
     res.status(400).json({
       success: false,
       message: error.message,
