@@ -9,13 +9,19 @@ const animalSchema = new mongoose.Schema(
     animalType: {
       type: String,
       required: [true, 'Animal type is required'],
+      // --- UPDATED: This enum now matches your frontend/controller ---
       enum: [
-        // Mammals
-        'Deer', 'Fox', 'Rabbit', 'Squirrel', 'Bat', 'Other Mammal',
-        // Birds
-        'Songbird', 'Bird of Prey', 'Waterfowl', 'Wading Bird', 'Other Bird',
-        // Reptiles & Amphibians
-        'Snake', 'Lizard', 'Turtle', 'Frog', 'Other Reptile/Amphibian'
+        'Mammal', 
+        'Bird', 
+        'Reptile', 
+        'Amphibian', 
+        'Fish',
+        'AnnelidBivalve', // Annelids / Bivalves
+        'ButterflyMoth',  // Butterfly / Moth
+        'Dragonfly',      // Dragonfly / Damselfly
+        'Spider',
+        'OtherInsect',    // Other Insects
+        'Crustacean'      // Crustacean (e.g., Crab)
       ],
     },
     photo: {

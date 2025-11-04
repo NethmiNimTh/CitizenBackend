@@ -9,19 +9,19 @@ const humanActivitySchema = new mongoose.Schema(
     activityType: {
       type: String,
       required: [true, "Activity type is required"],
+     
       enum: [
-        // Environmental Impacts
-        "Fire",
-        "Deforestation",
-        "Mining",
-        "Waste & Pollution",
-        "Waste disposal",
-        "Plastic and polythene",
-        "Constructions",
-        "Domestic Animal",
-        "Hunting",
-        "Illegal behaviour",
-        "Other",
+        'deforestation',
+        'fire',
+        'mining',
+        'wastePollution',
+        'habitatChange',
+        'construction',
+        'collection',
+        'loudNoise',
+        'poaching',
+        'invasiveSpecies',
+        'other'
       ],
     },
     photo: {
