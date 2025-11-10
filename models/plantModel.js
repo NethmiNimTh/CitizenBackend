@@ -14,7 +14,10 @@ const plantSchema = new mongoose.Schema(
     plantType: {
       type: String,
       required: [true, 'Plant type is required'],
-      enum: ['plant', 'epiphyte', 'lichen', 'bryophyte', 'fungi', 'other', 'floating', 'submerged'],
+      enum: [
+        'plant', 'epiphyte', 'lichen', 'bryophyte', 'fungi', 'other',
+        'floating', 'submerged'
+      ],
     },
     photo: {
       type: String,
@@ -33,6 +36,16 @@ const plantSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    // --- ADDED ---
+    commonName: {
+      type: String,
+      trim: true,
+    },
+    scientificName: {
+      type: String,
+      trim: true,
+    },
+    // ---
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

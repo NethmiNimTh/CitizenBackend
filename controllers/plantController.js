@@ -1,35 +1,33 @@
-import Plant from "../models/plantModel.js"; 
+import Plant from "../models/plantModel.js";
 
+// ✅ Create new plant observation
 export const createPlant = async (req, res) => {
   try {
-    console.log(' POST /api/plants - Received request');
-    console.log('Body size:', JSON.stringify(req.body).length, 'bytes');
+    console.log('POST /api/plants - Received request');
     
     const { 
-      plantCategory, 
+      plantCategory,
       plantType, 
       photo, 
       date, 
       timeOfDay, 
-      description 
+      description,
+      location,
+      commonName,     
+      scientificName   
     } = req.body;
 
     // Validation
     if (!plantCategory || !plantType || !photo || !date || !timeOfDay) {
-      console.log(' Validation failed');
+      console.log('Validation failed - missing required fields');
       return res.status(400).json({
         success: false,
-        message: "Missing required fields",
+        message: "Please provide all required fields (plantCategory, plantType, photo, date, timeOfDay)",
       });
     }
 
-    console.log('Creating plant...');
-    console.log('Category:', plantCategory);
-    console.log('Type:', plantType);
-    console.log('Date:', date);
-    console.log('Time:', timeOfDay);
-
-    const plant = await Plant.create({
+    // Create plant observation
+    const observation = await Plant.create({
       category: 'Plant',
       plantCategory,
       plantType,
@@ -37,17 +35,30 @@ export const createPlant = async (req, res) => {
       date,
       timeOfDay,
       description: description || undefined,
+      location: location || undefined,
+      commonName: commonName || undefined,
+      scientificName: scientificName || undefined,
     });
 
-    console.log(' Plant created:', plant._id);
+    console.log('Plant observation created:', observation._id);
 
     res.status(201).json({
       success: true,
       message: "Plant observation created successfully",
-      data: plant,
+      data: observation,
     });
   } catch (error) {
-    console.error(' Error:', error.message);
+    console.error('Error creating plant observation:', error);
+
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error",
+        errors: errors,
+      });
+    }
+
     res.status(400).json({
       success: false,
       message: error.message,
@@ -55,94 +66,46 @@ export const createPlant = async (req, res) => {
   }
 };
 
+// ✅ Get all plant observations
 export const getPlants = async (req, res) => {
   try {
-    const plants = await Plant.find().sort({ createdAt: -1 });
+    const observations = await Plant.find().sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
-      count: plants.length,
-      data: plants,
+      count: observations.length,
+      data: observations,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
+// ✅ Get plant by ID
 export const getPlantById = async (req, res) => {
   try {
-    const plant = await Plant.findById(req.params.id);
-    if (!plant) {
-      return res.status(404).json({
-        success: false,
-        message: "Plant not found",
-      });
+    const observation = await Plant.findById(req.params.id);
+    if (!observation) {
+      return res.status(404).json({ success: false, message: "Plant observation not found" });
     }
-    res.status(200).json({
-      success: true,
-      data: plant,
-    });
+    res.status(200).json({ success: true, data: observation });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export const updatePlant = async (req, res) => {
-  try {
-    const plant = await Plant.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!plant) {
-      return res.status(404).json({
-        success: false,
-        message: "Plant not found",
-      });
-    }
-    res.status(200).json({
-      success: true,
-      data: plant,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const deletePlant = async (req, res) => {
-  try {
-    const plant = await Plant.findByIdAndDelete(req.params.id);
-    if (!plant) {
-      return res.status(404).json({
-        success: false,
-        message: "Plant not found",
-      });
-    }
-    res.status(200).json({
-      success: true,
-      message: "Plant deleted",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
+// ✅ Get plants by category
 export const getPlantsByCategory = async (req, res) => {
   try {
-    const plants = await Plant.find({ 
-      plantCategory: req.params.category 
-    }).sort({ createdAt: -1 });
-    
+    const { category } = req.params;
+    const plants = await Plant.find({ plantCategory: category }).sort({ createdAt: -1 });
+
+    if (!plants.length) {
+      return res.status(404).json({
+        success: false,
+        message: `No plants found for category: ${category}`,
+      });
+    }
+
     res.status(200).json({
       success: true,
       count: plants.length,
@@ -153,5 +116,36 @@ export const getPlantsByCategory = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+// ✅ Update plant observation
+export const updatePlant = async (req, res) => {
+  try {
+    const observation = await Plant.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!observation) {
+      return res.status(404).json({ success: false, message: "Plant observation not found" });
+    }
+    res.status(200).json({ success: true, message: "Updated successfully", data: observation });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// ✅ Delete plant observation
+export const deletePlant = async (req, res) => {
+  try {
+    const observation = await Plant.findById(req.params.id);
+    if (!observation) {
+      return res.status(404).json({ success: false, message: "Plant observation not found" });
+    }
+    await observation.deleteOne();
+    res.status(200).json({ success: true, message: "Deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

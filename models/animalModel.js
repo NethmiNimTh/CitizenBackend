@@ -9,19 +9,18 @@ const animalSchema = new mongoose.Schema(
     animalType: {
       type: String,
       required: [true, 'Animal type is required'],
-      // --- UPDATED: This enum now matches your frontend/controller ---
       enum: [
         'Mammal', 
         'Bird', 
         'Reptile', 
         'Amphibian', 
         'Fish',
-        'AnnelidBivalve', // Annelids / Bivalves
-        'ButterflyMoth',  // Butterfly / Moth
-        'Dragonfly',      // Dragonfly / Damselfly
+        'AnnelidBivalve',
+        'ButterflyMoth',
+        'Dragonfly',
         'Spider',
-        'OtherInsect',    // Other Insects
-        'Crustacean'      // Crustacean (e.g., Crab)
+        'OtherInsect',
+        'Crustacean'
       ],
     },
     photo: {
@@ -41,6 +40,16 @@ const animalSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    // --- ADDED ---
+    commonName: {
+      type: String,
+      trim: true,
+    },
+    scientificName: {
+      type: String,
+      trim: true,
+    },
+    // ---
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

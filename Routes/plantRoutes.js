@@ -1,32 +1,31 @@
 import express from "express";
 import {
+  createPlant,
   getPlants,
   getPlantById,
-  createPlant,
-  updatePlant,
-  deletePlant,
   getPlantsByCategory,
+  updatePlant,
+  deletePlant
 } from "../controllers/plantController.js";
 
 const router = express.Router();
 
-// Test route to verify router works
-router.get("/test", (req, res) => {
-  res.json({ success: true, message: "Plant routes working!" });
-});
+// ✅ Create new plant
+router.post("/", createPlant);
 
-// Main routes
-router.route("/")
-  .get(getPlants)
-  .post(createPlant);
+// ✅ Get all plants
+router.get("/", getPlants);
 
-// Category route
+// ✅ Get plant by ID
+router.get("/:id", getPlantById);
+
+// ✅ Get plants by category
 router.get("/category/:category", getPlantsByCategory);
 
-// ID routes
-router.route("/:id")
-  .get(getPlantById)
-  .put(updatePlant)
-  .delete(deletePlant);
+// ✅ Update plant
+router.put("/:id", updatePlant);
+
+// ✅ Delete plant
+router.delete("/:id", deletePlant);
 
 export default router;

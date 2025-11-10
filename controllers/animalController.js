@@ -1,6 +1,6 @@
 import Animal from "../models/animalModel.js";
 
-
+// --- UPDATED: createAnimal ---
 export const createAnimal = async (req, res) => {
   try {
     console.log('POST /api/animals - Received request');
@@ -12,7 +12,9 @@ export const createAnimal = async (req, res) => {
       date, 
       timeOfDay, 
       description,
-      location 
+      location,
+      commonName,      
+      scientificName   
     } = req.body;
 
     // Validation
@@ -24,11 +26,11 @@ export const createAnimal = async (req, res) => {
       });
     }
 
-    // Validate animalType
+    // Validate animalType (assuming new list)
     const validTypes = [
-      'Deer', 'Fox', 'Rabbit', 'Squirrel', 'Bat', 'Other Mammal',
-      'Songbird', 'Bird of Prey', 'Waterfowl', 'Wading Bird', 'Other Bird',
-      'Snake', 'Lizard', 'Turtle', 'Frog', 'Other Reptile/Amphibian'
+      'Mammal', 'Bird', 'Reptile', 'Amphibian', 'Fish',
+      'AnnelidBivalve', 'ButterflyMoth', 'Dragonfly', 'Spider',
+      'OtherInsect', 'Crustacean'
     ];
     
     if (!validTypes.includes(animalType)) {
@@ -47,10 +49,7 @@ export const createAnimal = async (req, res) => {
     }
 
     console.log('Creating animal observation...');
-    console.log('Type:', animalType);
-    console.log('Date:', date);
-    console.log('Time:', timeOfDay);
-
+    
     // Create animal observation
     const observation = await Animal.create({
       category: 'Animal',
@@ -60,6 +59,8 @@ export const createAnimal = async (req, res) => {
       timeOfDay,
       description: description || undefined,
       location: location || undefined,
+      commonName: commonName || undefined,          // --- ADDED ---
+      scientificName: scientificName || undefined,  // --- ADDED ---
     });
 
     console.log('Animal observation created:', observation._id);
@@ -95,6 +96,7 @@ export const createAnimal = async (req, res) => {
   }
 };
 
+// --- (No changes needed for get, update, delete as they are generic) ---
 
 export const getAnimals = async (req, res) => {
   try {
@@ -113,7 +115,6 @@ export const getAnimals = async (req, res) => {
     });
   }
 };
-
 
 export const getAnimalById = async (req, res) => {
   try {
@@ -147,9 +148,9 @@ export const getAnimalById = async (req, res) => {
   }
 };
 
-
 export const updateAnimal = async (req, res) => {
   try {
+    // No changes needed here, as req.body will contain the new fields
     const observation = await Animal.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -192,7 +193,6 @@ export const updateAnimal = async (req, res) => {
   }
 };
 
-
 export const deleteAnimal = async (req, res) => {
   try {
     const observation = await Animal.findById(req.params.id);
@@ -220,7 +220,6 @@ export const deleteAnimal = async (req, res) => {
     });
   }
 };
-
 
 export const getAnimalsByType = async (req, res) => {
   try {
@@ -259,44 +258,17 @@ export const getAnimalStats = async (req, res) => {
       }
     ]);
 
-    // Group by category (Mammals, Birds, Reptiles)
-    const mammals = ['Deer', 'Fox', 'Rabbit', 'Squirrel', 'Bat', 'Other Mammal'];
-    const birds = ['Songbird', 'Bird of Prey', 'Waterfowl', 'Wading Bird', 'Other Bird'];
-    const reptiles = ['Snake', 'Lizard', 'Turtle', 'Frog', 'Other Reptile/Amphibian'];
-
-    const categoryStats = await Animal.aggregate([
-      {
-        $group: {
-          _id: {
-            $switch: {
-              branches: [
-                { case: { $in: ['$animalType', mammals] }, then: 'Mammals' },
-                { case: { $in: ['$animalType', birds] }, then: 'Birds' },
-                { case: { $in: ['$animalType', reptiles] }, then: 'Reptiles & Amphibians' }
-              ],
-              default: 'Other'
-            }
-          },
-          count: { $sum: 1 }
-        }
-      },
-      {
-        $sort: { count: -1 }
-      }
-    ]);
-
     // Recent observations
     const recentObservations = await Animal.find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('animalType date createdAt');
+      .select('animalType date createdAt commonName'); // Added commonName
 
     res.status(200).json({
       success: true,
       data: {
         totalObservations,
         typeStats,
-        categoryStats,
         recentObservations
       }
     });
