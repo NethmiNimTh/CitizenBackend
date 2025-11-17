@@ -11,11 +11,11 @@ import { errorHandler } from "./Middlewares/errorMiddlewares.js";
 import CreditRoutes from "./Routes/CreditRoutes.js";
 
 
-console.log('userRoutes type:', typeof userRoutes);
-console.log('plantRoutes type:', typeof plantRoutes);
-console.log('natureRoutes type:', typeof natureRoutes);
-console.log('animalRoutes type:', typeof animalRoutes);
-console.log('CreditRoutes type:', typeof CreditRoutes);
+// console.log('userRoutes type:', typeof userRoutes);
+// console.log('plantRoutes type:', typeof plantRoutes);
+// console.log('natureRoutes type:', typeof natureRoutes);
+// console.log('animalRoutes type:', typeof animalRoutes);
+// console.log('CreditRoutes type:', typeof CreditRoutes);
 
 
 dotenv.config();
@@ -50,23 +50,23 @@ app.get("/", (req, res) => {
 
 
 // API Routes
-console.log('Registering /api/users...');
+// console.log('Registering /api/users...');
 app.use("/api/users", userRoutes);
 
-console.log('Registering /api/plants...');
+// console.log('Registering /api/plants...');
 app.use("/api/plants", plantRoutes);
 
-console.log('Registering /api/nature...');
+// console.log('Registering /api/nature...');
 app.use("/api/nature", natureRoutes);
 
-console.log('Registering /api/animals...');
+// console.log('Registering /api/animals...');
 app.use("/api/animals", animalRoutes);
 
-app.use("/api/humanity",humanityRoutes);
+// app.use("/api/humanity",humanityRoutes);
 app.use("/api/photo-information", CreditRoutes);
 
 
-console.log('All routes registered!');
+// console.log('All routes registered!');
 
 // 404 Handler
 app.use((req, res) => {
@@ -85,10 +85,10 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`\n Server running on http://localhost:${PORT}`);
   
-  console.log(`Users: http://localhost:${PORT}/api/users`);
-  console.log(`Plants: http://localhost:${PORT}/api/plants`);
-  console.log(`Nature: http://localhost:${PORT}/api/nature`);
-  console.log(`Animals: http://localhost:${PORT}/api/animals`);
+  // console.log(`Users: http://localhost:${PORT}/api/users`);
+  // console.log(`Plants: http://localhost:${PORT}/api/plants`);
+  // console.log(`Nature: http://localhost:${PORT}/api/nature`);
+  // console.log(`Animals: http://localhost:${PORT}/api/animals`);
 
 });
 
