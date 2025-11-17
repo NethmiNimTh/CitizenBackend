@@ -6,7 +6,7 @@ import userRoutes from "./Routes/userRoutes.js";
 import plantRoutes from "./Routes/plantRoutes.js";
 import natureRoutes from "./Routes/natureRoutes.js";
 import animalRoutes from "./Routes/animalRoutes.js";
-import humanityRoutes from "./Routes/humanityRoutes.js";
+import humanActivityRoutes from './Routes/humanityRoutes.js';
 import { errorHandler } from "./Middlewares/errorMiddlewares.js";
 import CreditRoutes from "./Routes/CreditRoutes.js";
 
@@ -64,6 +64,8 @@ app.use("/api/animals", animalRoutes);
 
 // app.use("/api/humanity",humanityRoutes);
 app.use("/api/photo-information", CreditRoutes);
+
+app.use('/api/human-activities', humanActivityRoutes);
 
 
 // console.log('All routes registered!');

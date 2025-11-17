@@ -1,6 +1,5 @@
 import Animal from "../models/animalModel.js";
 
-// --- UPDATED: createAnimal ---
 export const createAnimal = async (req, res) => {
   try {
     console.log('POST /api/animals - Received request');
